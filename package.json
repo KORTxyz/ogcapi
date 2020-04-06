@@ -1,0 +1,40 @@
+{
+  "name": "ogcapi",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js --trace-sync-io",
+    "dev": "nodemon index.js --trace-sync-io",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "KORTxyz",
+  "license": "ISC",
+  "dependencies": {
+    "@mapbox/tiletype": "^0.3.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "express-jwt": "^5.3.1",
+    "gdal-next": "^1.0.2",
+    "http-errors": "^1.7.3",
+    "nedb-promises": "^4.0.1",
+    "node-gyp": "^6.1.0",
+    "proj4": "^2.6.0",
+    "readdirp": "^3.4.0",
+    "sqlite3": "^4.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "bin": "util/popCollectionsDB.js",
+  "pkg": {
+    "assets": [
+      "node_modules/gdal-next/**/*",
+      "node_modules/gdal-next/node_modules/node-pre-gyp/**/*"
+    ],
+    "targets": [
+      "node12-win-x64"
+    ]
+  }
+}
