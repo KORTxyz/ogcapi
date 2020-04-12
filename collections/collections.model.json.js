@@ -1,24 +1,25 @@
-const collections = async (baseUrl,f,datasets) => {
+const collections = async (baseUrl,datasets) => {
     return {
         "links": [
             {
                 "href": `${baseUrl}/collections?f=json`,
-                "rel": `${ f=='json'?'self':'alternate'}`,
+                "rel": 'self',
                 "type": "application/json",
                 "title": "This document as JSON"
             },
             {
                 "href": `${baseUrl}/collections?f=html`,
-                "rel": `${ f=='html'?'self':'alternate'}`,
+                "rel": 'alternate',
                 "type": "text/html",
                 "title": "This document as HTML"
             }
         ],
-        "collections": datasets.map(collection)
+        "collections": datasets.map(dataset => collection(dataset,baseUrl))
     }
 }
 
-const collection = (data) =>{
+const collection = async (baseUrl,data) =>{
+    console.log(baseUrl,data) 
     //const links = await formatLinks(data,req)
     return {
         "name": data.name,
@@ -28,12 +29,11 @@ const collection = (data) =>{
         "extent": {
            "spatial": data.bbox
         },
-        "links": []
+        "links": links(data,baseUrl)
     }
 }
 
-const collectionLinks = async (data,req) => {
-    const baseUrl = `${req.protocol}://${req.headers.host}`;
+const links = (data,baseUrl) => {
     const fileFormat = {
         "png": "image/png",
         "jpg": "image/jpeg",
@@ -76,8 +76,16 @@ const collectionLinks = async (data,req) => {
     
 }
 
-
+const featureCollection  = async (features) =>{
+    return {
+        "type": "FeatureCollection",
+        "features": features
+    }
+    
+}
 
 module.exports = {
-    collections
+    collections,
+    collection,
+    featureCollection
 };

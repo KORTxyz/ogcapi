@@ -7,16 +7,15 @@ const collectionscontroller = require('./collections.controller');
 
 module.exports = router;
 
-
 router.get('/', authorize(), asyncHandler(collectionscontroller.getCollections) );
 //router.post('/', authorize(), collectionscontroller.postCollection );
 
-//router.get('/:collectionId', authorize(), collectionscontroller.getCollection );
+router.get('/:collectionName', authorize(), asyncHandler(collectionscontroller.getCollection) );
 
-//router.get('/:collectionId/items/', authorize(), collectionscontroller.getItems );
-//router.get('/:collectionId/items/:featureId', authorize(), collectionscontroller.getItem );
+router.get('/:collectionName/items/', authorize(), asyncHandler(collectionscontroller.getItems) );
+//router.get('/:collectionName/items/:featureId', authorize(), collectionscontroller.getItem );
 
-//router.get('/:collectionId/tiles', authorize(), (req, res) =>{ res.json({ "tilingSchemes": [ "GoogleMapsCompatible" ] }) } );
-//router.get('/:collectionId/tiles/GoogleMapsCompatible',authorize(), (req, res) => res.sendFile('GoogleMapsCompatible.json',{ root: __dirname }) );
+//router.get('/:collectionName/tiles', authorize(), (req, res) =>{ res.json({ "tilingSchemes": [ "GoogleMapsCompatible" ] }) } );
+//router.get('/:collectionName/tiles/GoogleMapsCompatible',authorize(), (req, res) => res.sendFile('GoogleMapsCompatible.json',{ root: __dirname }) );
 
-//router.get('/:collectionId/tiles/:tilingSchemes/:z/:x/:y', authorize(), collectionscontroller.getTile);
+//router.get('/:collectionName/tiles/:tilingSchemes/:z/:x/:y', authorize(), collectionscontroller.getTile);

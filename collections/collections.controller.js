@@ -10,7 +10,7 @@ const getCollections = async (req, res, next) => {
 	const format = f ||'json';
 
 	collectionsService
-	 .getCollections(baseUrl,format,query)
+	.getCollections(baseUrl,format,query)
 	.then(msg => {
 		res.json(msg)
 	})
@@ -18,25 +18,30 @@ const getCollections = async (req, res, next) => {
 
 }
 
-const getCollection = async (req, res) => {
-	collectionsService.getCollection(req)
-	.then(msg => res.json(msg) )
-	.catch(err => res.status(400).json(err) )
+const getCollection = async (req, res, next) => {
+	const baseUrl = `${req.protocol}://${req.headers.host}`;
+	const collectionName = req.params.collectionName;
+
+	collectionsService.getCollection(baseUrl,collectionName)
+		.then(msg => res.json(msg) )
+		.catch(next)
 }
 
 const postCollection = async (req, res) => {
 	collectionsService.createCollection(req)
-	.then(msg => res.json(msg) )
-	.catch(err => res.status(400).json(err) )
+		.then(msg => res.json(msg) )
+		.catch(err => res.status(400).json(err) )
 }
 
-const getItems = async (req, res) => {
-	collectionsService.getItems(req)
-	.then(msg => {
-		if(req.query.f&&req.query.f=="json") res.json(msg)
-		else res.sendFile(__dirname.replace('collections','') + '/views/items.html')
-	})
-	.catch(err => res.status(400).json(err) )
+const getItems = async (req, res, next) => {
+	const collectionName = req.params.collectionName;
+	let  {f, ...query} = req.query;
+	const format = f ||'json';
+
+	collectionsService.getItems(collectionName,query)
+		.then(msg => res.json(msg))
+		.catch(next)
+
 }
 
 const getItem = async (req, res) => {
