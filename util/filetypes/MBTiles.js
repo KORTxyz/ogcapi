@@ -18,7 +18,7 @@ module.exports = (file,group) => new Promise( (resolve, reject)=> {
           title: row.name,
           group: group,
           file: file,
-          type: 'MBTiles',
+          type: 'mbtiles',
           format: row.format,
           desc: row.description,
           bbox: row.bounds.split(",").map(e=>Number(e))
@@ -31,7 +31,7 @@ module.exports = (file,group) => new Promise( (resolve, reject)=> {
           title: layer.id,
           group: group,
           file: file,
-          type: 'MBTiles',
+          type: 'mbtiles',
           format: row.format,
           desc: layer.description,
           bbox: row.bounds.split(",").map(e=>Number(e))

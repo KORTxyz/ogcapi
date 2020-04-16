@@ -11,18 +11,22 @@
   "author": "KORTxyz",
   "license": "ISC",
   "dependencies": {
+    "@mapbox/sphericalmercator": "^1.1.0",
     "@mapbox/tiletype": "^0.3.1",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "express-jwt": "^5.3.1",
     "gdal-next": "^1.0.2",
-    "http-errors": "^1.7.3",
+    "geojson-assert": "0.0.2",
+    "geojson-vt": "^3.2.1",
     "nedb-promises": "^4.0.1",
     "node-gyp": "^6.1.0",
     "proj4": "^2.6.0",
     "readdirp": "^3.4.0",
-    "sqlite3": "^4.1.1"
+    "sqlite3": "^4.1.1",
+    "vt-pbf": "^3.1.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

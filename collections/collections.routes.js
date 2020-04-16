@@ -12,10 +12,17 @@ router.get('/', authorize(), asyncHandler(collectionscontroller.getCollections) 
 
 router.get('/:collectionName', authorize(), asyncHandler(collectionscontroller.getCollection) );
 
-router.get('/:collectionName/items/', authorize(), asyncHandler(collectionscontroller.getItems) );
-//router.get('/:collectionName/items/:featureId', authorize(), collectionscontroller.getItem );
+router.get('/:collectionName/items', authorize(), asyncHandler(collectionscontroller.getItems) );
+router.post('/:collectionName/items', authorize(), asyncHandler(collectionscontroller.postItems) );
 
-//router.get('/:collectionName/tiles', authorize(), (req, res) =>{ res.json({ "tilingSchemes": [ "GoogleMapsCompatible" ] }) } );
-//router.get('/:collectionName/tiles/GoogleMapsCompatible',authorize(), (req, res) => res.sendFile('GoogleMapsCompatible.json',{ root: __dirname }) );
+router.get('/:collectionName/download', authorize(), asyncHandler(collectionscontroller.getDownload) );
 
-//router.get('/:collectionName/tiles/:tilingSchemes/:z/:x/:y', authorize(), collectionscontroller.getTile);
+router.get('/:collectionName/items/:featureId', authorize(), asyncHandler(collectionscontroller.getItem) );
+router.put('/:collectionName/items/:featureId', authorize(), asyncHandler(collectionscontroller.putItem) );
+router.delete('/:collectionName/items/:featureId', authorize(), asyncHandler(collectionscontroller.deleteItem) );
+
+//router.get('/:collectionName/queryables', authorize(), asyncHandler(collectionscontroller.getQueryables) );
+
+router.get('/:collectionName/tiles', authorize(), (req, res) =>{ res.json({ "TileMatrixSets": [ "GoogleMapsCompatible" ] }) } );
+
+router.get('/:collectionName/tiles/:tileMatrixSetId/:z/:x/:y', authorize(), collectionscontroller.getTile);

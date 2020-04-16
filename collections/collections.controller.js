@@ -1,29 +1,20 @@
 const tiletype = require('@mapbox/tiletype')
-
 const collectionsService = require('./collections.service');
 
 
-
 const getCollections = async (req, res, next) => {
-	const baseUrl = `${req.protocol}://${req.headers.host}`;
-	let  {f, ...query} = req.query;
-	const format = f ||'json';
+	const  {f, ...query} = req.query;
 
-	collectionsService
-	.getCollections(baseUrl,format,query)
-	.then(msg => {
-		res.json(msg)
-	})
+	collectionsService.getCollections(query)
+	.then(msg => res.json(msg))
 	.catch(next)
-
 }
 
 const getCollection = async (req, res, next) => {
-	const baseUrl = `${req.protocol}://${req.headers.host}`;
-	const collectionName = req.params.collectionName;
+	const {collectionName} = req.params;
 
-	collectionsService.getCollection(baseUrl,collectionName)
-		.then(msg => res.json(msg) )
+	collectionsService.getCollection(collectionName)
+		.then(msg => res.json(msg))
 		.catch(next)
 }
 
@@ -34,43 +25,89 @@ const postCollection = async (req, res) => {
 }
 
 const getItems = async (req, res, next) => {
-	const collectionName = req.params.collectionName;
-	let  {f, ...query} = req.query;
-	const format = f ||'json';
+	const {collectionName} = req.params;
+	const {f, ...query} = req.query;
+	const originalUrl = req.originalUrl
 
-	collectionsService.getItems(collectionName,query)
+	collectionsService.getItems(collectionName,query,originalUrl)
 		.then(msg => res.json(msg))
 		.catch(next)
 
 }
 
-const getItem = async (req, res) => {
-	collectionsService.getItem(req)
-	.then(msg => res.json(msg) )
-	.catch(err => res.status(400).json(err) )
+const postItems = async (req, res) => {
+	const {collectionName} = req.params;
+	const geojson = req.body;
+
+	collectionsService.postItems(collectionName,geojson)
+		.then(msg => res.json(msg) )
+		.catch(err => res.status(400).json(err) )
 }
 
+const getItem = async (req, res) => {
+	const {collectionName, featureId} = req.params;
+
+	collectionsService.getItem(collectionName,featureId)
+		.then(msg => res.json(msg) )
+		.catch(err => res.status(400).json(err) )
+}
+
+
+
+const putItem = async (req, res) => {
+	const {collectionName, featureId} = req.params;
+	const geojson = req.body;
+
+	collectionsService.putItem(collectionName,featureId,geojson)
+		.then(msg => res.json(msg) )
+		.catch(err => res.status(400).json(err) )
+}
+
+const deleteItem = async (req, res) => {
+	const {collectionName, featureId} = req.params;
+
+	collectionsService.deleteItem(collectionName,featureId)
+		.then(msg => res.json(msg) )
+		.catch(err => res.status(400).json(err) )
+}
 
 
 const getTile = async (req, res) => {
-	collectionsService.getTile(req)
-	.then(tile =>{
-		if(tile){
-			res.writeHead(200, tiletype.headers(tile))
-			res.end(tile)
-		}
-		else{
-			res.status(404).end()
-		}
-	})
-	.catch(err => res.status(400).json(err) )
+	const {collectionName, tileMatrixSetId, z, x, y} = req.params;
+
+	collectionsService.getTile(collectionName, tileMatrixSetId, z, x, y)
+		.then(tile =>{
+			if(tile){
+				res.writeHead(200, tiletype.headers(tile))
+				res.end(tile)
+			}
+			else{
+				res.status(404).end()
+			}
+		})
+		.catch(err => res.status(400).json(err) )
 }
+
+const getDownload = async (req, res) => {
+	const {collectionName} = req.params;
+	console.log(collectionName)
+	collectionsService.getDownload(collectionName)
+		.then(file => {
+			
+			res.download(file)} )
+		.catch(err => res.status(400).json(err) )
+}
+
 
 module.exports = {
     getCollections,
     postCollection,
     getCollection,
     getItems,
-    getItem,
-    getTile,
+	postItems,
+	getItem,
+	putItem,
+	deleteItem,
+	getTile,
+	getDownload
 };

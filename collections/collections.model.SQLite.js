@@ -6,14 +6,14 @@ const geojsonvt = require('geojson-vt')
 const vtpbf = require('vt-pbf')
 
 const createFeature = (data,geometryColumn) => {
-    const { g, ...properties } = data;
+    const { geom, ...properties } = data;
     delete properties[geometryColumn]
     delete properties[geometryColumn.toUpperCase()]
 
 	return {
 		"type": "Feature",
 		"properties": properties,
-		"geometry": JSON.parse(g),
+		"geometry": geom,
 		"id": Object.values(properties)[0]
 		}
 }
@@ -21,15 +21,16 @@ const createFeature = (data,geometryColumn) => {
 const getGeoJSON = (dataset,query) => {
     const {limit, offset, bbox, f, token, ...options} = query
 
+    const [tableName] = dataset.name.split(":").slice(-1)
     const where =  Object.entries(options).map(e=> e[0]+" like '"+ unescape(e[1])+"'").join(" AND ")
-
+    
     const sql = `SELECT ROWID, *, AsGeoJSON(${dataset.format},6) geojson 
-                 FROM  ${dataset.name}
+                 FROM  ${tableName}
                  WHERE ${where?" "+where:"1=1"}
-                 ${bbox? `AND ROWID IN (SELECT ROWID FROM SpatialIndex WHERE f_table_name = '${dataset.name}' and f_geometry_column = '${dataset.format}'  AND search_frame = BuildMbr(${bbox.toString()}) )`:""} 
+                 ${bbox? `AND ROWID IN (SELECT ROWID FROM SpatialIndex WHERE f_table_name = '${tableName}' and f_geometry_column = '${dataset.format}'  AND search_frame = BuildMbr(${bbox.toString()}) )`:""} 
                  LIMIT ${offset?offset+", ":""} ${limit?limit:10}`;
 
-    const db = new sqlite3.Database(dataset.file , sqlite3.OPEN_READONLY);
+    const db = new sqlite3.cached.Database(dataset.file , sqlite3.OPEN_READWRITE);
     
     return new Promise( (resolve, reject)=> {
         db.loadExtension('./mod_spatialite', (err)=> {
@@ -53,15 +54,89 @@ const getGeoJSON = (dataset,query) => {
     
 };
 
-const getVectorTile = (dataset,z,x,y) => {
+const postGeoJSON = (dataset,geojson) => {
+    const [tableName] = dataset.name.split(":").slice(-1)
+
+    const values = geojson.features.map(feature => {
+        const values = "'" + Object.values(feature.properties).join("','") + "'" ;
+        const geom = JSON.stringify(feature.geometry);
+        return `(${values},SetSRID(GeomFromGeoJSON('${geom}'),4326))`
+    })
+      
+    const keys = Object.keys(geojson.features[0].properties).join();
+    const sql = `INSERT INTO ${tableName} (${keys},GEOMETRY)
+                VALUES ${values.join(",")}`;
+    const db = new sqlite3.cached.Database(dataset.file , sqlite3.OPEN_READWRITE);
+    
+    return new Promise( (resolve, reject)=> {
+        db.loadExtension('./mod_spatialite', err=> {
+            db.run(sql, (err, response) =>{
+                if (err) reject({"code": err.code,"description": err.message});
+                else resolve(response);
+            });
+        });
+    });
+    
+};
+
+const putGeoJSON = (dataset,id,geojson) => {
+
+    
+    const [tableName] = dataset.name.split(":").slice(-1)
+
+
+    const values = geojson.features.map(feature => {
+        const values = "'" + Object.values(feature.properties).join("','") + "'" ;
+        const geom = JSON.stringify(feature.geometry);
+        return `(${id},${values},SetSRID(GeomFromGeoJSON('${geom}'),4326))`
+    })
+
+
+    const keys = Object.keys(geojson.features[0].properties).join();
+    const sql = `REPLACE INTO ${tableName} (ROWID,${keys},GEOMETRY)
+                 VALUES ${values.join(",")}`;
+    console.log(sql)
+
+    const db = new sqlite3.cached.Database(dataset.file, sqlite3.OPEN_READWRITE);
+    
+    return new Promise( (resolve, reject)=> {
+        db.loadExtension('./mod_spatialite', err=> {
+            db.run(sql, (err, response) =>{
+                if (err) reject({"code": err.code,"description": err.message});
+                else resolve(response);
+            });
+        });
+    });
+    
+};
+
+const deleteGeoJSON = (dataset,id) => {
+    const [tableName] = dataset.name.split(":").slice(-1)
+    const sql = `DELETE FROM ${tableName}
+                 WHERE ROWID=${id};`;
+
+    const db = new sqlite3.cached.Database(dataset.file , sqlite3.OPEN_READWRITE);
+    return new Promise( (resolve, reject)=> {
+        db.loadExtension('./mod_spatialite', err=> {
+            db.run(sql, (err, response) =>{
+                if (err) reject({"code": err.code,"description": err.message});
+                else resolve(response);
+            });
+        });
+    });
+    
+};
+
+const getTile = (dataset,z,x,y) => {
     return new Promise( (resolve, reject)=> {
     const bbox = merc.bbox(x, y, z)
 
-    const query = `SELECT *, AsGeoJSON(${dataset.format},6) g FROM ${dataset.name} where intersects(${dataset.name}.${dataset.format},BuildMbr(${bbox.toString()})) AND
-                    ROWID IN (SELECT ROWID FROM SpatialIndex WHERE f_table_name = '${dataset.name}' and f_geometry_column = '${dataset.format}' 
+    const [tableName] = dataset.name.split(":").slice(-1)
+    const query = `SELECT *, AsGeoJSON(${dataset.format},6) g FROM ${tableName} where intersects(${tableName}.${dataset.format},BuildMbr(${bbox.toString()})) AND
+                    ROWID IN (SELECT ROWID FROM SpatialIndex WHERE f_table_name = '${tableName}' and f_geometry_column = '${dataset.format}' 
                       AND search_frame = BuildMbr(${bbox.toString()}) 	) LIMIT 10000`;
 
-    const db =  new sqlite3.Database(dataset.file, sqlite3.OPEN_READONLY, (err=> {if(err) reject(err)}))
+    const db =  new sqlite3.cached.Database(dataset.file, sqlite3.OPEN_READWRITE, (err=> {if(err) reject(err)}))
         db.loadExtension('./mod_spatialite', (err)=> {
             if(err) reject(err)
             db.all(query, (err, rows) => {
@@ -75,7 +150,7 @@ const getVectorTile = (dataset,z,x,y) => {
                     let tileIndex = geojsonvt(geojson,{maxZoom: 20})
                     let tile = tileIndex.getTile(parseInt(z),parseInt(x),parseInt(y))
                     Obj = {};
-                    Obj[dataset.name] = tile
+                    Obj[tableName] = tile
                     const pbf =  vtpbf.fromGeojsonVt(Obj, { version: 2 })
                     resolve(Buffer.from(pbf));
                 }
@@ -92,5 +167,8 @@ const getVectorTile = (dataset,z,x,y) => {
 
 module.exports = {
     getGeoJSON,
-    getVectorTile,
+    postGeoJSON,
+    putGeoJSON,
+    deleteGeoJSON,
+    getTile,
 };
