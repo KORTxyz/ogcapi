@@ -35,14 +35,16 @@ const collection = data => {
 }
 
 const links = data => {
-    const [name] = data.name
-
     const mimeTypes = {
         "png": "image/png",
         "jpg": "image/jpeg",
         "webp": "image/webp",
-        "pbf": "application/vnd.mapbox-vector-tile"
+        "pbf": "application/vnd.mapbox-vector-tile",
+        ".gpkg": "application/geopackage+vnd.sqlite3",
+        ".mbtiles": "application/mbtiles+vnd.sqlite3",
+        ".sqlite": "application/vnd.sqlite3"
     }
+
     const self = [{
         "href": `${global.baseUrl}/collections/${data.name}?f=json`,
         "rel": "self",
@@ -79,7 +81,7 @@ const links = data => {
     const download = {
         "href": `${global.baseUrl}/collections/${data.name}/download`,
         "rel": "download",
-        "type": path.extname(data.file),
+        "type": data.file? mimeTypes[path.extname(data.file)]: "application/json",
         "title": `Download dataset behind ${data.title}.`
     }
 
@@ -101,16 +103,24 @@ const links = data => {
                 tiles
             ];
 
+        case "wfs":
+            return [
+                ...self,
+                item
+            ];
+
         default: return [];
     }
 
 }
 
 const featureCollection = async (features, originalUrl, query) => {
+    const links = originalUrl? featuresLinks(features, originalUrl, query): {};
+
     return {
         "type": "FeatureCollection",
         "features": features,
-        "links": featuresLinks(features, originalUrl, query)
+        ...links 
     }
 
 }
@@ -119,14 +129,13 @@ const featuresLinks = (features, originalUrl, query,) => {
     let {limit, offset, ...options} = query
 
     limit = limit || 10;
-    offset = offset ? offset : limit;
-    offset = (offset - limit) < 0 ? limit : offset;
+    offset = offset || 0;
+    lastoffset = (offset - limit) < 0 ? '' : `&offset=${offset - limit}`;
 
     queryParams = Object.entries(options).map(e=>`${e[0]}=${e[1]}`)
     queryParams = queryParams.length>0?queryParams.join("&")+"&":"";
 
-    const links =
-        features.length ?
+    const links = features.length ?
             [{
                 "href": `${global.baseUrl}${originalUrl}`,
                 "rel": "self",
@@ -138,7 +147,7 @@ const featuresLinks = (features, originalUrl, query,) => {
                 "type": "application/geo+json",
                 "title": "Next results"
             }, {
-                "href": `${global.baseUrl}${originalUrl.split("?")[0]}?${queryParams}limit=${limit}&offset=${offset - limit}`,
+                "href": `${global.baseUrl}${originalUrl.split("?")[0]}?${queryParams}limit=${limit}${lastoffset}`,
                 "rel": "last",
                 "type": "application/geo+json",
                 "title": "Last results"
@@ -149,7 +158,8 @@ const featuresLinks = (features, originalUrl, query,) => {
                 "type": "application/geo+json",
                 "title": "This document"
             }];
-    return links
+
+    return {links:links}
 }
 
 module.exports = {

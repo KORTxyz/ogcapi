@@ -19,7 +19,7 @@ const readFile = async file => {
 
       const metadata = await fileReader(file.fullPath)
       global.collectionDB.insert(metadata).catch(err=>{ throw err; })
-    }  
+    }
 }
 
 const readDir = async dir => {
@@ -27,5 +27,6 @@ const readDir = async dir => {
 }
 
 module.exports = {
-    readDir
+  readFile,
+  readDir
 };

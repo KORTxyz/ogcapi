@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path')
 const asyncHandler = require('express-async-handler')
 
 const authorize = require('../util/authorize.js')
@@ -30,8 +31,8 @@ const tilingSchemes = _ => {
           {
             "rel": "TilingScheme",
             "type": "application/json",
-            "title": "Google Maps Tiling Scheme",
-            "href": `${global.baseUrl}/tilingschemes/default`
+            "title": "GoogleMapsCompatible",
+            "href": `${global.baseUrl}/tilematrixsets/default`
           }
         ]
       }

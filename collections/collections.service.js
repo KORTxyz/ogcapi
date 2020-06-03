@@ -15,20 +15,36 @@ const getCollections = async query => {
     const datasets = await global.collectionDB.find({$and: search})
             .sort({name:1}).skip(Number(offset)).limit(Number(limit));
     const response = jsonTemplates.collections(datasets);
-    return response
+    return response;
 }
 
 const getCollection = async collectionName => {
     const dataset = await global.collectionDB.findOne({name:collectionName})
     if(dataset.length==0) throw "no dataset match"
     const response = await jsonTemplates.collection(dataset);
-    return response
+    return response;
 }
 
+const postCollection = async (json, files) => {
+   
+    if(json.type == "url"){
+        response = await require('../util/dataurl').readUrl(json.url)
+    }
+    else if (json.type == "file"){
+        const file = {
+            basename:files[0].filename,
+            fullPath:files[0].path,
+        }
+        response = await require('../util/datadir').readFile(file)
+    }
+     
+    return response;
+}
 
 const getItems = async (collectionName, query, originalUrl) => {
     const dataset = await global.collectionDB.findOne({name:collectionName})
-    const {limit,offset, ...find} = query;
+    const {limit,offset, ...rest} = query;
+    
     const features = await require(`./collections.model.${dataset.type}`).getGeoJSON(dataset,query)
     const response = await jsonTemplates.featureCollection(features,originalUrl,query);
 
@@ -36,7 +52,9 @@ const getItems = async (collectionName, query, originalUrl) => {
 }
 
 const postItems = async (collectionName, geojson) => {
-    require('geojson-assert')(geojson)
+    const err = require('@mapbox/geojsonhint').hint(geojson)
+    if(err.length) throw ({"code": "GEOJSON_ERROR","description":  err[0].message});
+
 
     if(!geojson.features){
         geojson = {"type": "FeatureCollection","features": [geojson] }
@@ -50,16 +68,15 @@ const postItems = async (collectionName, geojson) => {
 
 const getItem = async (collectionName, featureID) => {
     const dataset = await global.collectionDB.findOne({name:collectionName})
-    const query = {ROWID:featureID}
-
-    const features = await require(`./collections.model.${dataset.type}`).getGeoJSON(dataset,query)
+    const features = await require(`./collections.model.${dataset.type}`).getGeoJSON(dataset,{},featureID)
     const response = await jsonTemplates.featureCollection(features);
 
     return response;
 }
 
 const putItem = async (collectionName, featureID, geojson) => {
-    require('geojson-assert')(geojson)
+    const err = require('@mapbox/geojsonhint').hint(geojson)
+    if(err.length) throw ({"code": "GEOJSON_ERROR","description":  err[0].message});
 
     if(!geojson.features){
         geojson = {"type": "FeatureCollection","features": [geojson] }
@@ -96,6 +113,7 @@ const getDownload = async (collectionName) => {
 module.exports = {
     getCollections,
     getCollection,
+    postCollection,
     getItems,
     postItems,
     getItem,

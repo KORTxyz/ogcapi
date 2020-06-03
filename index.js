@@ -5,8 +5,13 @@ const NeDB = require('nedb-promises');
 if(process.env.RELOAD_DB == 'true'){
     const fs = require('fs');
     if(fs.existsSync('collection.db')) {fs.unlinkSync('collection.db')}
+
     const datadir = require('./util/datadir');
     datadir.readDir(process.env.DATA_DIR);
+
+    const dataurl = require('./util/dataurl');
+    dataurl.readUrl(process.env.DATA_URL);
+
 }
 
 global.collectionDB = NeDB.create('collection.db')

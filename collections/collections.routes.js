@@ -2,13 +2,21 @@ const express = require('express');
 const router = express.Router();
 const asyncHandler = require('express-async-handler')
 
+const multer  = require('multer');
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, 'temp/'),
+    filename: (req, file, cb) => cb(null, file.originalname)
+});
+const upload = multer({storage: storage});
+const cpUpload = upload.array('file', 12);
+
 const authorize = require('../util/authorize.js')
 const collectionscontroller = require('./collections.controller');
 
 module.exports = router;
 
 router.get('/', authorize(), asyncHandler(collectionscontroller.getCollections) );
-//router.post('/', authorize(), collectionscontroller.postCollection );
+router.post('/', authorize(), cpUpload, asyncHandler(collectionscontroller.postCollection) );
 
 router.get('/:collectionName', authorize(), asyncHandler(collectionscontroller.getCollection) );
 

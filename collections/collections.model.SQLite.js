@@ -18,12 +18,13 @@ const createFeature = (data,geometryColumn) => {
 		}
 }
 
-const getGeoJSON = (dataset,query) => {
+const getGeoJSON = (dataset,query,featureID) => {
+    if(featureID) query = {ROWID:featureID}
+
     const {limit, offset, bbox, f, token, ...options} = query
 
     const [tableName] = dataset.name.split(":").slice(-1)
     const where =  Object.entries(options).map(e=> e[0]+" like '"+ unescape(e[1])+"'").join(" AND ")
-    
     const sql = `SELECT ROWID, *, AsGeoJSON(${dataset.format},6) geojson 
                  FROM  ${tableName}
                  WHERE ${where?" "+where:"1=1"}
@@ -79,9 +80,7 @@ const postGeoJSON = (dataset,geojson) => {
     
 };
 
-const putGeoJSON = (dataset,id,geojson) => {
-
-    
+const putGeoJSON = (dataset,id,geojson) => {  
     const [tableName] = dataset.name.split(":").slice(-1)
 
 

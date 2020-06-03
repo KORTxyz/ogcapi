@@ -6,9 +6,10 @@ const getCollections = async (req, res, next) => {
 	const  {f, ...query} = req.query;
 
 	collectionsService.getCollections(query)
-	.then(msg => res.json(msg))
-	.catch(next)
+		.then(msg => res.json(msg))
+		.catch(next)
 }
+
 
 const getCollection = async (req, res, next) => {
 	const {collectionName} = req.params;
@@ -18,11 +19,16 @@ const getCollection = async (req, res, next) => {
 		.catch(next)
 }
 
-const postCollection = async (req, res) => {
-	collectionsService.createCollection(req)
+
+const postCollection = async (req, res, next) => {
+	const files = req.files
+	const json = JSON.parse(req.body.json)
+
+	collectionsService.postCollection(json, files)
 		.then(msg => res.json(msg) )
 		.catch(err => res.status(400).json(err) )
 }
+
 
 const getItems = async (req, res, next) => {
 	const {collectionName} = req.params;
@@ -35,6 +41,7 @@ const getItems = async (req, res, next) => {
 
 }
 
+
 const postItems = async (req, res) => {
 	const {collectionName} = req.params;
 	const geojson = req.body;
@@ -43,6 +50,7 @@ const postItems = async (req, res) => {
 		.then(msg => res.json(msg) )
 		.catch(err => res.status(400).json(err) )
 }
+
 
 const getItem = async (req, res) => {
 	const {collectionName, featureId} = req.params;
@@ -53,7 +61,6 @@ const getItem = async (req, res) => {
 }
 
 
-
 const putItem = async (req, res) => {
 	const {collectionName, featureId} = req.params;
 	const geojson = req.body;
@@ -62,6 +69,7 @@ const putItem = async (req, res) => {
 		.then(msg => res.json(msg) )
 		.catch(err => res.status(400).json(err) )
 }
+
 
 const deleteItem = async (req, res) => {
 	const {collectionName, featureId} = req.params;
@@ -88,13 +96,12 @@ const getTile = async (req, res) => {
 		.catch(err => res.status(400).json(err) )
 }
 
+
 const getDownload = async (req, res) => {
 	const {collectionName} = req.params;
-	console.log(collectionName)
+
 	collectionsService.getDownload(collectionName)
-		.then(file => {
-			
-			res.download(file)} )
+		.then(file => res.download(file) )
 		.catch(err => res.status(400).json(err) )
 }
 
