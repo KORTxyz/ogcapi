@@ -15,6 +15,9 @@ const collectionscontroller = require('./collections.controller');
 
 module.exports = router;
 
+
+
+
 router.get('/', authorize(), asyncHandler(collectionscontroller.getCollections) );
 router.post('/', authorize(), cpUpload, asyncHandler(collectionscontroller.postCollection) );
 

@@ -9,7 +9,7 @@ const getGeoJSON = async (dataset,query,featureID) => {
     
 
     const url = `${dataset.url}?service=wfs${featureID}&version=2.0.0&request=GetFeature&typeNames=${dataset.name}&outputFormat=application/json&count=${limit}${offset}&srsName=EPSG:4326`
-    const geojson = await fetch(url).then(res=>res.json())
+    const geojson = await fetch(encodeURI(url)).then(res=>res.json())
 
     return geojson.features;
 };

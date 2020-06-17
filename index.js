@@ -28,11 +28,16 @@ app.use(express.json());
 app.use(cors());
 app.use((err, req, res, next) => res.status(err.status||500).json({"code": err.name,"description": err.message}))
 
+app.use((err, req, res, next) =>{
+
+})
+
 app.get('/', require('./index/index'));
 
 app.use('/api', require('./api/notimplementet'));
 app.use('/conformance', require('./conformance/conformance'));
 app.use('/collections', require('./collections/collections.routes'));
+app.use('/collections(.:format)', require('./collections/collections.routes'));
 app.use('/tilematrixsets', require('./tilematrixsets/tilematrixsets'));
 app.use('/styles', require('./styles/notimplementet'));
 app.use('/processes', require('./processes/notimplementet'));
