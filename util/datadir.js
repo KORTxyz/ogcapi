@@ -17,7 +17,7 @@ const readFile = async file => {
       const fileType = item.driver.description;
       console.log(fileType, file.basename)
 
-      const fileReader = require('./filetypes/'+fileType);
+      const fileReader = require(path.resolve("filetypes", fileType));
 
       const metadata = await fileReader(file.fullPath)
       global.collectionDB.insert(metadata).catch(err=>{ throw err; })
