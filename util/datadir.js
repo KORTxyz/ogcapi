@@ -22,6 +22,9 @@ const readFile = async file => {
       const metadata = await fileReader(file.fullPath)
       global.collectionDB.insert(metadata).catch(err=>{ throw err; })
     }
+    else{
+      console.error("Can't find module",'./fileTypes/'+extName,". For file ",file.fullPath)
+    }
 }
 
 const readDir = async dir => {
