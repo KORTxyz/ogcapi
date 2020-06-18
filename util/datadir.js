@@ -13,6 +13,7 @@ const readFile = async file => {
     if(module_exists('./fileTypes/'+extName)){
       
       const item = await gdal.open(file.fullPath);
+      console.log(item)
       const fileType = item.driver.description;
       console.log(fileType, file.basename)
 
