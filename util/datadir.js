@@ -10,7 +10,7 @@ const module_exists =  name => {
 const readFile = async file => {
   const extName = path.extname(file.basename).substr(1).toLowerCase()
     console.log("datadir",file.fullPath)
-    if(module_exists('./filetypes/'+extName)){
+    if(module_exists(path.resolve("filetypes", extName))){
       
       const item = await gdal.open(file.fullPath);
       console.log(item)
@@ -23,7 +23,7 @@ const readFile = async file => {
       global.collectionDB.insert(metadata).catch(err=>{ throw err; })
     }
     else{
-      console.error("Can't find module",'./filetypes/'+extName,". For file",file.fullPath)
+      console.error("Can't find module",path.resolve("filetypes", extName),". For file",file.fullPath)
     }
 }
 
