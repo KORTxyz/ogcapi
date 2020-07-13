@@ -23,7 +23,7 @@ module.exports = (file,group) => new Promise( (resolve, reject)=> {
     db.all(sql, (err, rows) =>{
       if (err) reject(err);
       else {
-        rows = rows.filter(row=>row.row_count>0).map(row=> format(row))
+        rows = rows.map(row=> format(row))
         resolve(rows);
       }
     });  
