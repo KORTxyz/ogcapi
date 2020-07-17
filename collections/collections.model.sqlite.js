@@ -72,8 +72,9 @@ const postGeoJSON = (dataset,geojson) => {
     return new Promise( (resolve, reject)=> {
         db.loadExtension('./mod_spatialite', err=> {
             db.run(sql, (err, response) =>{
+                console.log(response)
                 if (err) reject({"code": err.code,"description": err.message});
-                else resolve(response);
+                else resolve({"code": "success","data": geojson});
             });
         });
     });

@@ -19,7 +19,6 @@ collectionDB.on('loadError', (datastore, error) => {console.error(datastore,erro
 collectionDB.ensureIndex({ fieldName: 'name', unique: true });   
 
 
-
 const express = require('express');
 const cors = require('cors');
 
@@ -27,10 +26,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use((err, req, res, next) => res.status(err.status||500).json({"code": err.name,"description": err.message}))
-
-app.use((err, req, res, next) =>{
-
-})
 
 app.get('/', require('./index/index'));
 
