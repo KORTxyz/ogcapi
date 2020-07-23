@@ -1,0 +1,65 @@
+<html>
+
+<head>
+    <style>
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+        
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
+        </style>
+</head>
+
+<body>
+    <script>
+        const onlyProps = fc => fc.features.map(e => e.properties)
+
+
+        const groupBy = function (data, key) {
+            return data.reduce(function (storage, item) {
+                var group = item[key];
+                storage[group] = storage[group] || [];
+                storage[group].push(item);
+                return storage;
+            }, {});
+        };
+        var data;
+
+        fetch("https://kort.xyz/collections/Mogens:svar/items?answer=1")
+            .then(res => res.json())
+            .then(fc => onlyProps(fc))
+            .then(props => groupBy(props, "user"))
+            .then(e => Object.entries(e).map(e => [e[0], e[1].length]))
+            .then(e => e.sort(function (a, b) { return b[1] - a[1] }))
+            .then(e => {
+                console.log(e)
+                const markup = `
+                <table>
+                <tr>
+                    <th>Navn</th>
+                    <th>Rigtige svar</th>
+                </tr>
+            ${e.map(user =>  `<tr> <td>${ user[0] } </td><td>${ user[1] } </td> </tr>`).join('')}
+        </table>`;
+                data = e;
+                document.body.innerHTML = markup;
+            })
+
+
+
+
+
+    </script>
+</body>
+
+</html>

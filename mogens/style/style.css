@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+*{
+    font-family: 'Open Sans', sans-serif;
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+
+#map.inactive {
+    filter: blur(10px);
+    pointer-events: none;
+}
+
+
+input{
+    font-family: 'Roboto', sans-serif;
+    font-size: 28px;
+    height: 70px;
+    letter-spacing: -0.02em;
+    margin: 12px;
+    color: #000000;
+}
+
+
+.dialog {
+    display:flex;
+    flex-direction: column;
+    position: fixed;
+    background: white;
+    max-width: 360px;
+    width: 100%;
+    height: 220px;
+    margin: auto;
+    left: 0;
+    right: 0;
+    overflow: auto;
+    bottom: -260px;
+   /*  transition: bottom 0.4s ease-out;*/ 
+    z-index: 2;
+    padding: 5px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+
+}
+.dialog.active {
+    bottom: calc(100% / 2 - 110px);
+}
+.dialog > h2 {
+    padding: 0 12;
+}
+
+.drawer {
+    position: fixed;
+    background: white;
+    max-width: 360px;
+    width: 100%;
+    height: 220px;
+    margin: auto;
+    left: 0;
+    right: 0;
+    overflow: auto;
+    bottom: -260px;
+   /*  transition: bottom 0.4s ease-out;*/ 
+    z-index: 2;
+    padding: 5px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+
+}
+
+.drawer.active {
+    bottom: 0;
+}
+
+row {
+    display:flex
+}
+
+#question{
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 28px;
+    height: 70px;
+    letter-spacing: -0.02em;
+    margin: 12px;
+    color: #000000;
+}
+
+
+.answer{
+    font-family: 'Roboto', sans-serif;
+    width: 164px;
+    height: 40px;
+    background: #678BE6;
+    border:0;
+    margin: 6px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 43px;
+    
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 14px;
+    line-height: 26px;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.04em;
+
+    color: #FFFFFF;
+}
+
+
+.answer:hover{
+    background: #b5b5b5;
+    cursor: pointer;
+}

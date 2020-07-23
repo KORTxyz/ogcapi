@@ -10,14 +10,13 @@ module.exports = router;
 
 
 const getIndex = async (req, res, next) => {
-	const format = req.query.f || 'json';
+	const format = req.query.f || 'html';
     if(format == 'json'){
         res.header("Content-Type",'application/json');
         res.json(landingpage());
     }
     else{
-        res.header("Content-Type",'application/json');
-        res.json({"code": "unavailable", "description": "not  implementet yet"});
+      res.sendFile('index.html', { root: __dirname });
     }
 }
 
