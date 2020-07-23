@@ -120,7 +120,7 @@ map.on('load', _ => {
     map.on('mouseleave', 'spg', _ => {
         map.getCanvas().style.cursor = '';
     });
-    map.on('click', 'spg', showDrawer)
+//    map.on('click', 'spg', showDrawer)
 
     fetch("https://kort.xyz/collections/Mogens:poster/items")
         .then(res => res.json())
