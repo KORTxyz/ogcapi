@@ -54,7 +54,7 @@ var map = new mapboxgl.Map({
     bounds: [[7.444865832358687,54.5589027475518],[14.459312141187922,57.90166702648932]],
 });
 
-const color = ['#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3'];
+const color = ['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf'];
 let data;
 
 
@@ -86,6 +86,10 @@ map.on('load', _ => {
                 color[3],
                 5,
                 color[4],
+                6,
+                color[5],
+                7,
+                color[6],
                 /* other */ '#ccc'
             ]
         }
@@ -110,6 +114,10 @@ map.on('load', _ => {
                 color[3],
                 5,
                 color[4],
+                6,
+                color[5],
+                7,
+                color[6],
                 /* other */ '#ccc'
             ]
         }
@@ -211,6 +219,7 @@ const gps = new mapboxgl.GeolocateControl({
     },
     trackUserLocation: true
 });
+
 gps.on('geolocate', insideCircle);
 
 map.addControl(gps)
