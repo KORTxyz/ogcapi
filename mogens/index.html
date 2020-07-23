@@ -199,7 +199,7 @@
                 document.querySelector(".dialog").classList.remove("active")
                 document.querySelector("#map").classList.remove("inactive")
                 name = document.querySelector("#name").value
-                fetch("https://kort.xyz/collections/test:svar/items?user=" + name)
+                fetch("https://kort.xyz/collections/Mogens:svar/items?user=" + name)
                     .then(res => res.json())
                     .then(e => {
                         answeredQuestions = [...new Set(e.features.map(e => e.properties.question))];
@@ -285,9 +285,9 @@
             map.on('mouseleave', 'spg', _ => {
                 map.getCanvas().style.cursor = '';
             });
-            map.on('click', 'spg', showDrawer)
+           // map.on('click', 'spg', showDrawer)
 
-            fetch("https://kort.xyz/collections/test:poster/items")
+            fetch("https://kort.xyz/collections/Mogens:poster/items")
                 .then(res => res.json())
                 .then(e => e.features.map(feature => turf.buffer(feature, 30, { units: "meters" })))
                 .then(features => {
@@ -338,7 +338,7 @@
                 answer: rightanswer,
                 time: Number(userData.time)
             })
-            fetch("https://kort.xyz/collections/test:svar/items", {
+            fetch("https://kort.xyz/collections/Mogens:svar/items", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
