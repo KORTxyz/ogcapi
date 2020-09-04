@@ -4,13 +4,19 @@ const NeDB = require('nedb-promises');
 
 if(process.env.RELOAD_DB == 'true'){
     const fs = require('fs');
-    if(fs.existsSync('collection.db')) {fs.unlinkSync('collection.db')}
+    if(fs.existsSync('collection.db')) {
+        fs.unlinkSync('collection.db')
+    }
 
-    const datadir = require('./util/datadir');
-    datadir.readDir(process.env.DATA_DIR);
+    if(process.env.DATA_DIR){
+        const datadir = require('./util/datadir');
+        datadir.readDir(process.env.DATA_DIR);
+    }
 
-    const dataurl = require('./util/dataurl');
-    dataurl.readUrl(process.env.DATA_URL);
+    if(process.env.DATA_URL){
+        const dataurl = require('./util/dataurl');
+        dataurl.readUrl(process.env.DATA_URL);
+    }
 
 }
 
@@ -21,10 +27,7 @@ collectionDB.ensureIndex({ fieldName: 'name', unique: true });
 
 const express = require('express');
 const cors = require('cors');
-
 const app = express();
-
-app.use('/mogens', express.static('./mogens'))
 
 app.use(express.json());
 app.use(cors());

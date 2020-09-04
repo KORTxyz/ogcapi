@@ -28,4 +28,3 @@ module.exports = (file,group) => new Promise( (resolve, reject)=> {
       }
     });  
   });
-  

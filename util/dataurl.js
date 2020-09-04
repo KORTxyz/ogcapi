@@ -26,7 +26,6 @@ const formatWFS = (url, layers) => {
 }
 
 const readUrl = async url => {
-  console.log(url)
     const capabilities = await GetCapabilities(url);
     const header = Object.keys(capabilities)[0]
     let metadata;

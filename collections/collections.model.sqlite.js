@@ -72,7 +72,6 @@ const postGeoJSON = (dataset,geojson) => {
     return new Promise( (resolve, reject)=> {
         db.loadExtension('./mod_spatialite', err=> {
             db.run(sql, (err, response) =>{
-                console.log(response)
                 if (err) reject({"code": err.code,"description": err.message});
                 else resolve({"code": "success","data": geojson});
             });
@@ -95,7 +94,6 @@ const putGeoJSON = (dataset,id,geojson) => {
     const keys = Object.keys(geojson.features[0].properties).join();
     const sql = `REPLACE INTO ${tableName} (ROWID,${keys},GEOMETRY)
                  VALUES ${values.join(",")}`;
-    console.log(sql)
 
     const db = new sqlite3.cached.Database(dataset.file, sqlite3.OPEN_READWRITE);
     

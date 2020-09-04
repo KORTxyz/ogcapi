@@ -6,7 +6,6 @@ const getCollections = async (req, res, next) => {
 
 	const  {f, ...query} = req.query;
 	const format = f || req.baseUrl.split(".")[1]
-	console.log(format)
 	collectionsService.getCollections(query)
 		.then(msg => res.json(msg))
 		.catch(next)
