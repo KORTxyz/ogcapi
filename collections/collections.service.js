@@ -43,6 +43,7 @@ const postCollection = async (type, req) => {
                 path: "data/" + group,
                 fullPath: "data/" + group + "/" + name
             }
+            console.log(config,file)
 
             await fs.stat(file.path).catch(e => fs.mkdir(file.path))
 
