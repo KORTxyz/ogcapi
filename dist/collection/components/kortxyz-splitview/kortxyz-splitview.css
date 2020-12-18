@@ -1,0 +1,16 @@
+kortxyz-splitview {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    flex: 1;
+    grid-template-columns: 1fr 2px 1fr;
+    grid-template-rows: 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+        ". . .";
+  }
+
+  kortxyz-splitview > resizer{
+    background: #555;
+    cursor: w-resize;
+  }

@@ -1,0 +1,28 @@
+{
+  "entries": [
+    "./components/kortxyz-collection/kortxyz-collection.js",
+    "./components/kortxyz-collections/kortxyz-collections.js",
+    "./components/kortxyz-coordinates/kortxyz-coordinates.js",
+    "./components/kortxyz-dropzone/kortxyz-dropzone.js",
+    "./components/kortxyz-empty/kortxyz-empty.js",
+    "./components/kortxyz-footer/kortxyz-footer.js",
+    "./components/kortxyz-gps/kortxyz-gps.js",
+    "./components/kortxyz-mapbox/kortxyz-mapbox.js",
+    "./components/kortxyz-menu/kortxyz-menu.js",
+    "./components/kortxyz-processes/kortxyz-processes.js",
+    "./components/kortxyz-sidebar/kortxyz-sidebar.js",
+    "./components/kortxyz-sideitem/kortxyz-sideitem.js",
+    "./components/kortxyz-splitview/kortxyz-splitview.js",
+    "./components/kortxyz-styles/kortxyz-styles.js",
+    "./components/kortxyz-tab/kortxyz-tab.js",
+    "./components/kortxyz-tabbar/kortxyz-tabbar.js",
+    "./components/my-component/my-component.js"
+  ],
+  "compiler": {
+    "name": "@stencil/core",
+    "version": "2.3.0",
+    "typescriptVersion": "4.0.5"
+  },
+  "collections": [],
+  "bundles": []
+}

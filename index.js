@@ -1,52 +1,25 @@
-require('dotenv').config()
+require('dotenv').config();
 
-const NeDB = require('nedb-promises');
+const cluster = require('cluster');
+const fs = require('fs/promises');
 
-if(process.env.RELOAD_DB == 'true'){
-    const fs = require('fs');
-    if(fs.existsSync('collection.db')) {
-        fs.unlinkSync('collection.db')
-    }
+(async () => {
+  // It works as expected, as long as you use the await keyword.
+  if(cluster.isMaster){
+    await fs.rmdir('./temp',{recursive:true});
+    await fs.mkdir('./temp');
+    await fs.stat('./data').catch(e => fs.mkdir('./data'))
 
-    if(process.env.DATA_DIR){
-        const datadir = require('./util/datadir');
-        datadir.readDir(process.env.DATA_DIR);
-    }
+    await require('./database').createCollection();
+    await require('./cluster').setupWorkerProcesses();
+  }
+  else{
+    require('./server').start(process);
+    require('./database').initCollection(process.pid);
+  };
 
-    if(process.env.DATA_URL){
-        const dataurl = require('./util/dataurl');
-        dataurl.readUrl(process.env.DATA_URL);
-    }
+})();
 
-}
-
-global.collectionDB = NeDB.create('collection.db')
-collectionDB.on('loadError', (datastore, error) => {console.error(datastore,error)})
-collectionDB.ensureIndex({ fieldName: 'name', unique: true });   
-
-
-const express = require('express');
-const cors = require('cors');
-const app = express();
-
-app.use(express.json());
-app.use(cors());
-app.use((err, req, res, next) => res.status(err.status||500).json({"code": err.name,"description": err.message}))
-
-app.get('/', require('./index/index'));
-
-app.use('/api', require('./api/notimplementet'));
-app.use('/conformance', require('./conformance/conformance'));
-app.use('/collections', require('./collections/collections.routes'));
-app.use('/collections(.:format)', require('./collections/collections.routes'));
-app.use('/tilematrixsets', require('./tilematrixsets/tilematrixsets'));
-app.use('/styles', require('./styles/notimplementet'));
-app.use('/processes', require('./processes/notimplementet'));
-
-
-
-global.baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT||4444}`
-
-app.listen(process.env.PORT || 4444, _ =>
-    console.log(`Application started on ${global.baseUrl}`)
-);
+process.on('exit', function(code) {
+  return console.log(`About to exit with code ${code}`);
+});

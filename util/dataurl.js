@@ -14,7 +14,8 @@ const formatWFS = (url, layers) => {
           title: layer.Title || layer['wfs:Name'],
           group: url.split("/")[2],
           url: url.split("?")[0],
-          type: 'wfs',
+          type: 'Webservice',
+          format: 'wfs',
           desc: layer.Abstract,
           bbox: [...layer['ows:WGS84BoundingBox']['ows:LowerCorner'].split(" "),...layer['ows:WGS84BoundingBox']['ows:UpperCorner'].split(" ")].map(num => Number(Number(num).toFixed(6) ))
         }

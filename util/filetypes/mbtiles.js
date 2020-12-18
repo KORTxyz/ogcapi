@@ -17,9 +17,10 @@ module.exports = (file,group) => new Promise( (resolve, reject)=> {
           name: path.basename(file,path.extname(file)),
           title: row.name,
           group: group,
-          file: file,
-          type: 'mbtiles',
-          format: row.format,
+          source: file.slice(0,-8),
+          type: 'File',
+          format: ['mbtiles'],
+          mimetype: row.format,
           desc: row.description,
           bbox: row.bounds.split(",").map(e=>Number(e))
         }];
@@ -30,9 +31,10 @@ module.exports = (file,group) => new Promise( (resolve, reject)=> {
           name: path.basename(file,path.extname(file))+':'+layer.id,
           title: layer.id,
           group: group,
-          file: file,
-          type: 'mbtiles',
-          format: row.format,
+          source: file.slice(0,-8),
+          type: 'File',
+          format: ['mbtiles'],
+          mimetype: row.format,
           desc: layer.description,
           bbox: row.bounds.split(",").map(e=>Number(e))
         }

@@ -1,0 +1,16 @@
+kortxyz-gps {
+    height: 100%;
+    display: flex;
+    width: 20px;
+    justify-content: center;
+  }
+
+  kortxyz-gps>.material-icons{
+    color: #ddd;
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  kortxyz-gps>.material-icons:hover{
+    color: rgb(255, 255, 255);
+  }

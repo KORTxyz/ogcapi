@@ -1,0 +1,78 @@
+kortxyz-dropzone {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+.dragtriggers {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 0.5fr 2fr 0.5fr;
+  grid-template-rows: 0.5fr 2fr 0.5fr;
+  gap: 0px 0px;
+  grid-template-areas:
+      "Left Top Right"
+      "Left Center Right"
+      "Left Bottom Right";
+      margin-left: -100%;
+      pointer-events: none;
+}
+
+
+.left {
+  grid-area: Left;
+}
+
+.right {
+  grid-area: Right;
+}
+
+.top {
+  grid-area: Top;
+}
+
+.bottom {
+  grid-area: Bottom;
+}
+
+.center {
+  grid-area: Center;
+}
+
+
+.centerghost{
+  display:flex;
+  flex: 1;
+  margin-left: -100%;
+  pointer-events: none;
+}
+
+.horizontalghost{
+  display:flex;
+  flex: 1;
+  margin-left: -100%;
+  pointer-events: none;
+
+}
+.leftghost{
+  flex:1;
+}
+.rightghost{
+  flex:1;
+}    
+.verticalghost{
+  display:flex;
+  flex: 1;
+  margin-left: -100%;
+  pointer-events: none;
+  flex-direction: column;
+}
+.topghost{
+  flex:1;
+}
+.bottomghost{
+  flex:1;
+}
+.show {
+  background-color: rgba(245, 245, 245, 0.316);
+}

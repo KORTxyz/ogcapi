@@ -1,0 +1,15 @@
+kortxyz-coordinates {
+  height: 100%;
+  padding: 0 20px 0 20px;  
+  display: flex;
+  justify-content: center;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  line-height: 20px;
+  color: #ddd;
+  cursor: pointer;
+}
+
+kortxyz-coordinates:hover {
+  background: #dddddd29;
+}

@@ -12,15 +12,18 @@ Data used in the project is stored in different [NeDB](https://github.com/louisc
 Contains data about the different sources to the OGC API. The columns are as follows:
 
 
-| Columns        | Description           | Cool  |
+| Columns        | Description           | Example  |
 | ------------- |:-------------:| -----:|
 | name      | unique name | Jordbrugsanalyser:CHR16 |
 | title      | title      |   CHR16 |
+| group      | group      |   LBST |
 | desc | description     |    Det centrale husdyrregister 2016 |
-| type | WMS/WFS     |    Det centrale husdyrregister 2016 |
-| source | source to the layer      |    https://geodata.fvm.dk/geoserver/ows?request=GetCapabilities OR d:\data\CHR.sqlite  |
+| type | type of source    |    Webservice/File  |
+| format | format    |    [sqlite]  |
+| source | source to the layer      |    http://geodata.fvm.dk/geoserver/ows? OR d:\\data\\CHR16  |
+| geomCol | column containing geometry | shape
 | bbox | spatial extent     |    [-80.632,57.8602,2.55999,84.6441] |
-| temporal | are neat      |    `{"interval":["2020-02-24T15:00:00Z","2020-02-24T16:00:00Z"]}` |
+| temporal | time extent      |    `{"interval":["2020-02-24T15:00:00Z","2020-02-24T16:00:00Z"]}` |
 
 ### Styles Database
 Contains data about the different styles in the OGC API. The columns are as follows:
@@ -30,6 +33,7 @@ Contains data about the different styles in the OGC API. The columns are as foll
 | col 3 is      | right-aligned | $1600 |
 | col 2 is      | centered      |   $12 |
 | zebra stripes | are neat      |    $1 |
+
 
 ### Users Database
 Contains data about the users in the OGC API. The columns are as follows:

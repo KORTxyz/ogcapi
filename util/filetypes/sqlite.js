@@ -8,9 +8,9 @@ module.exports = (file,group) => new Promise( (resolve, reject)=> {
           name: `${path.basename(file,'.sqlite')}:${row.table_name}`,
           title: row.table_name,
           group: group,
-          file: file,
-          type: 'sqlite',
-          format: row.geometry_column,
+          source: file.slice(0,-7),
+          format: ['sqlite'],
+          geomCol: row.geometry_column,
           desc: '',
           bbox: row.row_count>0?[row.extent_min_x,row.extent_min_y,row.extent_max_x,row.extent_max_y].map(number=>Number(number.toFixed(6))):[-180,-90,180,90]
         }
