@@ -8,8 +8,8 @@ const collectionscontroller = require('./collections.controller');
 module.exports = router;
 
 
-router.get('/', authorize(), asyncHandler(collectionscontroller.getCollections) );
-router.post('/', authorize(), asyncHandler(collectionscontroller.postCollection) );
+router.get('/', authorize(), asyncHandler(collectionscontroller.getCollections));
+router.post('/', authorize(), asyncHandler(collectionscontroller.postCollection));
 
 router.get('/:collectionName', authorize(), asyncHandler(collectionscontroller.getCollection) );
 

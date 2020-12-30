@@ -27,46 +27,37 @@ const getCollection = async collectionName => {
     return response;
 }
 
-const postCollection = async (type, req) => {
-    console.log("type:",type)
+const postCollection = async (type, req, res) => {
+    console.log("type:", type)
     if (type == 'hugeFile') {
         console.log("typetjeck OK:")
 
         const tmpDir = './temp';
         const maxFileSize = 10000;
         const maxChunkSize = 1000;
-        let assembleChunks
-        try {
-            assembleChunks = await uploader(req, tmpDir, maxFileSize, maxChunkSize)
-          } catch (error) {
-            console.error(error);
-            // expected output: ReferenceError: nonExistentFunction is not defined
-            // Note - error messages will vary depending on browser
-          }
-          
-        console.log("HugeFile: ",
-            assembleChunks,
-            req.header('uploader-file-id'),
-            req.header('uploader-chunk-number'),
-            req.header('uploader-chunks-total')
-        ) 
-        if (assembleChunks) {
-            const config = await assembleChunks()
-            const { name, group } = config.postParams;
-            const file = {
-                basename: name,
-                path: "data/" + group,
-                fullPath: "data/" + group + "/" + name
-            }
-            console.log(file)
 
-            await fs.stat(file.path).catch(e => fs.mkdir(file.path))
+        uploader(req, tmpDir, maxFileSize, maxChunkSize)
+            .then(async assembleChunks => {
+                res.writeHead(204, 'No Content', { 'Content-Type': 'text/plain' });
+                res.end();
+                if (assembleChunks) {
+                    const config = await assembleChunks()
+                    const { name, group } = config.postParams;
+                    const file = {
+                        basename: name,
+                        path: "data/" + group,
+                        fullPath: "data/" + group + "/" + name
+                    }
+                    console.log("file:", file)
 
-            await fs.rename(config.filePath, file.fullPath);
-            process.send({ code: 'newCollection', msg: file })
-        }
+                    await fs.stat(file.path).catch(e => fs.mkdir(file.path))
 
+                    await fs.rename(config.filePath, file.fullPath);
+                    process.send({ code: 'newCollection', msg: file })
+                }
+            })
     }
+
 }
 
 const getItems = async (collectionName, query, originalUrl) => {

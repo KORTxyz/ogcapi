@@ -28,13 +28,9 @@ const getCollection = async (req, res, next) => {
 
 
 const postCollection = async (req, res, next) => {
-	console.log(JSON.stringify(req.headers,null,2));
-
 	if(req.header('uploader-file-id')){
-		console.log("if sentence")
-		collectionsService.postCollection('hugeFile',req).catch(next);
-		res.writeHead(204, 'No Content', { 'Content-Type': 'text/plain' });
-		res.end();
+		collectionsService.postCollection('hugeFile',req,res).catch(next);
+
 	}
 }
 
