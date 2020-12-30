@@ -32,9 +32,9 @@ const postCollection = async (req, res, next) => {
 
 	if(req.header('uploader-file-id')){
 		console.log("if sentence")
+		collectionsService.postCollection('hugeFile',req).catch(next);
 		res.writeHead(204, 'No Content', { 'Content-Type': 'text/plain' });
 		res.end();
-		collectionsService.postCollection('hugeFile',req).catch(next);
 	}
 }
 

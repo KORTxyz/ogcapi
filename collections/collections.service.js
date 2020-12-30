@@ -28,6 +28,7 @@ const getCollection = async collectionName => {
 }
 
 const postCollection = async (type, req) => {
+    console.log("type:",type)
     if (type == "hugeFile") {
         const tmpDir = './temp';
         const maxFileSize = 10000;
