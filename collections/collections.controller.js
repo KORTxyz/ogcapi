@@ -28,12 +28,8 @@ const getCollection = async (req, res, next) => {
 
 
 const postCollection = async (req, res, next) => {
-	console.log("HugeFile? ",
-	assembleChunks,
-	req.header('uploader-file-id'),
-	req.header('uploader-chunk-number'),
-	req.header('uploader-chunks-total')
-	) 
+	console.log(JSON.stringify(req.headers));
+
 	if(req.header('uploader-file-id')){
 		res.writeHead(204, 'No Content', { 'Content-Type': 'text/plain' });
 		res.end();
