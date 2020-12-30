@@ -34,7 +34,7 @@ const postCollection = async (type, req) => {
         const maxChunkSize = 1000;
 
         const assembleChunks = await uploader(req, tmpDir, maxFileSize, maxChunkSize)
-    
+        
         if (assembleChunks) {
             const config = await assembleChunks()
             const { name, group } = config.postParams;
@@ -43,7 +43,7 @@ const postCollection = async (type, req) => {
                 path: "data/" + group,
                 fullPath: "data/" + group + "/" + name
             }
-            console.log(config,file)
+            console.log(file)
 
             await fs.stat(file.path).catch(e => fs.mkdir(file.path))
 

@@ -7,7 +7,7 @@ exports.createCollection = async () => {
     global.collectionDB.ensureIndex({ fieldName: 'name', unique: true });
     
     global.collectionDB.on('update', (datastore, result, query, update, options) => {
-        console.log(datastore, result, query, update, options)
+        //console.log(datastore, result, query, update, options)
     })
 
     if (process.env.RELOAD_DB == 'true') {
