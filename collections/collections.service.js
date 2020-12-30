@@ -35,13 +35,20 @@ const postCollection = async (type, req) => {
         const tmpDir = './temp';
         const maxFileSize = 10000;
         const maxChunkSize = 1000;
-
-        const assembleChunks = await uploader(req, tmpDir, maxFileSize, maxChunkSize)
+        let assembleChunks
+        try {
+            assembleChunks = await uploader(req, tmpDir, maxFileSize, maxChunkSize)
+          } catch (error) {
+            console.error(error);
+            // expected output: ReferenceError: nonExistentFunction is not defined
+            // Note - error messages will vary depending on browser
+          }
+          
         console.log("HugeFile: ",
-        assembleChunks,
-		req.header('uploader-file-id'),
-		req.header('uploader-chunk-number'),
-		req.header('uploader-chunks-total')
+            assembleChunks,
+            req.header('uploader-file-id'),
+            req.header('uploader-chunk-number'),
+            req.header('uploader-chunks-total')
         ) 
         if (assembleChunks) {
             const config = await assembleChunks()
