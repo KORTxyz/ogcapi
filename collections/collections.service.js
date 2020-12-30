@@ -34,7 +34,12 @@ const postCollection = async (type, req) => {
         const maxChunkSize = 1000;
 
         const assembleChunks = await uploader(req, tmpDir, maxFileSize, maxChunkSize)
-        
+        console.log("HugeFile: ",
+        assembleChunks,
+		req.header('uploader-file-id'),
+		req.header('uploader-chunk-number'),
+		req.header('uploader-chunks-total')
+        ) 
         if (assembleChunks) {
             const config = await assembleChunks()
             const { name, group } = config.postParams;
