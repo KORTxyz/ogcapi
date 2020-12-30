@@ -1,1 +1,0 @@
-import{r as e,g as r}from"./p-f4ecfe08.js";const t=class{constructor(r){e(this,r)}render(){return[]}get menuEl(){return r(this)}};t.style="kortxyz-menu{height:100%;width:100%;display:flex;flex:1}";export{t as kortxyz_menu}

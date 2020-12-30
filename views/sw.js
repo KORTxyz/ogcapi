@@ -26,63 +26,60 @@ self.addEventListener('message', (event) => {
  */
 self.__precacheManifest = [
   {
-    "url": "dist/kortxyz-components/index.esm.js",
+    "url": "dist/index.esm.js",
     "revision": "d41d8cd98f00b204e9800998ecf8427e"
   },
   {
-    "url": "dist/kortxyz-components/p-09707f39.js"
+    "url": "dist/p-0e711886.entry.js"
   },
   {
-    "url": "dist/kortxyz-components/p-0a16979d.entry.js"
+    "url": "dist/p-2069e38c.js"
   },
   {
-    "url": "dist/kortxyz-components/p-14d2f101.entry.js"
+    "url": "dist/p-2909aad3.entry.js"
   },
   {
-    "url": "dist/kortxyz-components/p-2329d0e9.entry.js"
+    "url": "dist/p-2cf18c95.entry.js"
   },
   {
-    "url": "dist/kortxyz-components/p-2efe33d7.entry.js"
+    "url": "dist/p-3e8ff66b.js"
   },
   {
-    "url": "dist/kortxyz-components/p-3daf36ee.entry.js"
+    "url": "dist/p-4bfc283d.js"
   },
   {
-    "url": "dist/kortxyz-components/p-3dc272a5.entry.js"
+    "url": "dist/p-51984827.entry.js"
   },
   {
-    "url": "dist/kortxyz-components/p-3e40396f.entry.js"
+    "url": "dist/p-5a35e0a0.entry.js"
   },
   {
-    "url": "dist/kortxyz-components/p-3e8ff66b.js"
+    "url": "dist/p-5e776104.entry.js"
   },
   {
-    "url": "dist/kortxyz-components/p-4502703a.entry.js"
+    "url": "dist/p-6ba886ce.entry.js"
   },
   {
-    "url": "dist/kortxyz-components/p-4bfc283d.js"
+    "url": "dist/p-7228dc20.entry.js"
   },
   {
-    "url": "dist/kortxyz-components/p-596ed185.entry.js"
+    "url": "dist/p-acaf509b.entry.js"
   },
   {
-    "url": "dist/kortxyz-components/p-abed492c.entry.js"
+    "url": "dist/p-afa081d9.entry.js"
   },
   {
-    "url": "dist/kortxyz-components/p-c99f12d3.entry.js"
+    "url": "dist/p-b4e37136.entry.js"
   },
   {
-    "url": "dist/kortxyz-components/p-e5ed1197.entry.js"
+    "url": "dist/p-ccdb82dd.entry.js"
   },
   {
-    "url": "dist/kortxyz-components/p-eef6b37a.entry.js"
-  },
-  {
-    "url": "dist/kortxyz-components/p-f4ecfe08.js"
+    "url": "dist/p-ce3bc777.entry.js"
   },
   {
     "url": "index.html",
-    "revision": "14827876f276d67a55d3c19bc4e25025"
+    "revision": "5d2ec94e20cd7b60355a4d9936162dd1"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
