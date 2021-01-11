@@ -22,7 +22,9 @@ exports.start = async (worker) =>{
     app.use('/collections', require('./collections/collections.routes'));
     app.use('/tilematrixsets', require('./tilematrixsets/tilematrixsets'));
     app.use('/styles', require('./styles/notimplementet'));
-    app.use('/processes', require('./processes/notimplementet'));
-  
+    app.use('/processes', require('./processes/processes.routes'));
+
+    app.use('/wmts', require('./wmts'));
+
     app.listen(PORT, ()=> console.log(`Express server listening on port ${PORT} and worker ${process.pid}`));
 }

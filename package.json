@@ -29,7 +29,9 @@
     "proj4": "^2.6.2",
     "readdirp": "^3.5.0",
     "sqlite3": "^5.0.0",
-    "vt-pbf": "^3.1.1"
+    "suncalc": "^1.8.0",
+    "vt-pbf": "^3.1.1",
+    "wmts": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"

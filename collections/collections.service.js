@@ -20,18 +20,10 @@ const getCollections = async query => {
     return response;
 }
 
-const getCollection = async collectionName => {
-    const dataset = await global.collectionDB.findOne({ name: collectionName })
-    if (dataset.length == 0) throw "no dataset match"
-    const response = await jsonTemplates.collection(dataset);
-    return response;
-}
+
 
 const postCollection = async (type, req, res) => {
-    console.log("type:", type)
     if (type == 'hugeFile') {
-        console.log("typetjeck OK:")
-
         const tmpDir = './temp';
         const maxFileSize = 10000;
         const maxChunkSize = 1000;
@@ -48,8 +40,6 @@ const postCollection = async (type, req, res) => {
                         path: "data/" + group,
                         fullPath: "data/" + group + "/" + name
                     }
-                    console.log("file:", file)
-
                     await fs.stat(file.path).catch(e => fs.mkdir(file.path))
 
                     await fs.rename(config.filePath, file.fullPath);
@@ -58,6 +48,38 @@ const postCollection = async (type, req, res) => {
             })
     }
 
+}
+
+const getCollection = async collectionName => {
+    const dataset = await global.collectionDB.findOne({ name: collectionName })
+    if (dataset.length == 0) throw "no dataset match"
+    const response = await jsonTemplates.collection(dataset);
+    return response;
+}
+
+const patchCollection = async (collectionName, patch)=> {
+    const dataset = await global.collectionDB.findOne({ name: collectionName })
+    if (dataset.length == 0) throw "no dataset match"
+
+    patch.desc = patch.description;
+    patch.bbox = patch.extent.spatial;
+
+    validKeys = ["name","title","group","desc","bbox"]
+    for (key in patch) validKeys.includes(key) || delete patch[key];
+
+    for (key in patch) dataset[key] = patch[key];
+    await global.collectionDB.update({ name: collectionName}, { $set: dataset })
+
+    const response = await jsonTemplates.collection(dataset);
+
+    return response;
+}
+
+const deleteCollection = async collectionName => {
+    const dataset = await global.collectionDB.remove({ name: collectionName })
+    if (dataset == 0) throw "no dataset match"
+
+    return "collection deleted";
 }
 
 const getItems = async (collectionName, query, originalUrl) => {
@@ -124,7 +146,6 @@ const deleteItem = async (collectionName, featureID) => {
 }
 
 const getTile = async (collectionName, tileMatrixSetId, z, x, y) => {
-
     const dataset = await global.collectionDB.findOne({ name: collectionName })
     const format = dataset.format.length == 1 ? dataset.format[0] : dataset.format.includes("mbtiles") ? "mbtiles" : dataset.format[0];
 
@@ -142,8 +163,10 @@ const getDownload = async (collectionName, format) => {
 
 module.exports = {
     getCollections,
-    getCollection,
     postCollection,
+    getCollection,
+    patchCollection,
+    deleteCollection,
     getItems,
     postItems,
     getItem,

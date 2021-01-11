@@ -17,6 +17,12 @@ const getCollections = async (req, res, next) => {
 
 }
 
+const postCollection = async (req, res, next) => {
+	if(req.header('uploader-file-id')){
+		collectionsService.postCollection('hugeFile',req,res).catch(next);
+	}
+}
+
 
 const getCollection = async (req, res, next) => {
 	const { collectionName } = req.params;
@@ -26,13 +32,23 @@ const getCollection = async (req, res, next) => {
 		.catch(next)
 }
 
+const patchCollection = async (req, res, next) => {
+	const { collectionName } = req.params;
 
-const postCollection = async (req, res, next) => {
-	if(req.header('uploader-file-id')){
-		collectionsService.postCollection('hugeFile',req,res).catch(next);
-
-	}
+	collectionsService.patchCollection(collectionName,req.body)
+		.then(msg => res.json(msg))
+		.catch(next)
 }
+
+const deleteCollection = async (req, res, next) => {
+	const { collectionName } = req.params;
+
+	collectionsService.deleteCollection(collectionName)
+		.then(msg => res.json(msg))
+		.catch(next)
+}
+
+
 
 
 const getItems = async (req, res, next) => {
@@ -116,6 +132,8 @@ module.exports = {
 	getCollections,
 	postCollection,
 	getCollection,
+	patchCollection,
+	deleteCollection,
 	getItems,
 	postItems,
 	getItem,

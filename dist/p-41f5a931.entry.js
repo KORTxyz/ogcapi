@@ -1,0 +1,1 @@
+import{r as t,g as r}from"./p-597d4401.js";const e=class{constructor(r){t(this,r)}render(){return[]}get dropzoneEl(){return r(this)}};e.style="kortxyz-empty{height:100%;width:100%;display:flex;flex:1}";export{e as kortxyz_empty}

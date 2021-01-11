@@ -12,6 +12,8 @@ router.get('/', authorize(), asyncHandler(collectionscontroller.getCollections))
 router.post('/', authorize(), asyncHandler(collectionscontroller.postCollection));
 
 router.get('/:collectionName', authorize(), asyncHandler(collectionscontroller.getCollection) );
+router.patch('/:collectionName', authorize(), asyncHandler(collectionscontroller.patchCollection) );
+router.delete('/:collectionName', authorize(), asyncHandler(collectionscontroller.deleteCollection) );
 
 router.get('/:collectionName/items', authorize(), asyncHandler(collectionscontroller.getItems) );
 router.post('/:collectionName/items', authorize(), asyncHandler(collectionscontroller.postItems) );
